@@ -1,5 +1,7 @@
 package com.herbruns.pbsync.util;
 
+// Thanks to Runelite, this was built with the help of their Pb aliases
+
 public class BossNames {
     private String[] allNames;
 

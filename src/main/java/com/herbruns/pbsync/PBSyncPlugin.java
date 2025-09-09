@@ -46,14 +46,12 @@ public class PBSyncPlugin extends Plugin
         {
             personalBestInChat = injector.getInstance(PersonalBestInChat.class);
         }
-        personalBestInChat.setUp();
 	}
 
 	@Override
 	protected void shutDown() throws Exception
 	{
         personalBestSync.cleanUp();
-        personalBestInChat.cleanUp();
 	}
 
     @Subscribe
@@ -79,7 +77,7 @@ public class PBSyncPlugin extends Plugin
                 personalBestSync.handlePbSyncCommand();
             }
         }
-        // anything else, we don't care about right now
+        // anything else, we don't care about (right now)
     }
 
 	@Provides

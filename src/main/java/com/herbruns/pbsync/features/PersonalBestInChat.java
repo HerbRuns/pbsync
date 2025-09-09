@@ -22,16 +22,6 @@ public class PersonalBestInChat
     @Inject
     private PBSyncConfig config;
 
-    public void setUp()
-    {
-        // nothing
-    }
-
-    public void cleanUp()
-    {
-        // nothing
-    }
-
     public void handleNewPbInChat(String msg)
     {
         msg = Text.removeTags(msg).replace('\u00A0', ' ').trim();

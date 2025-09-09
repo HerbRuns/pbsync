@@ -1,7 +1,7 @@
-// Thanks to MasterKenth for this code which was lifted and used as a base from another open-source plugin
-// The Discord code was taken directly and worked in my plugin.
-// Wanted to keep record MasterKenth's old license below
-// Thanks again for the open source community and code!
+// Thanks to MasterKenth for this code which was lifted/referenced from another open-source plugin
+// The Discord code was taken/adapted for the use in this plugin.
+// Wanted to keep record of MasterKenth's old license below
+// Thanks again to the open source community and code!
 
 /*
  * BSD 2-Clause License
