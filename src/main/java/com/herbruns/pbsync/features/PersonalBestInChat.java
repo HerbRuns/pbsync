@@ -22,6 +22,15 @@ public class PersonalBestInChat
     @Inject
     private PBSyncConfig config;
 
+    private Discord discord;
+    private ApiHandler apiHandler;
+
+    public void setUp(Discord discord, ApiHandler apiHandler)
+    {
+        this.discord = discord;
+        this.apiHandler = apiHandler;
+    }
+
     public void handleNewPbInChat(String msg)
     {
         msg = Text.removeTags(msg).replace('\u00A0', ' ').trim();
@@ -54,7 +63,7 @@ public class PersonalBestInChat
         List<String> webhookUrls = new ArrayList<>();
         webhookUrls.add(config.newPbWebhookUrl());
 
-        ApiHandler.Instance().sendWebhookData(webhookUrls, newPersonalBestMessage(msg, player, activity, time))
+        apiHandler.sendWebhookData(webhookUrls, newPersonalBestMessage(msg, player, activity, time))
             .exceptionally(ex -> {
                 log.error("Failed to send webhook data", ex);
                 return null;
@@ -63,7 +72,7 @@ public class PersonalBestInChat
 
     private Webhook newPersonalBestMessage(String msg, String playerName, String activity, String time)
     {
-        Embed embed = Discord.createEmbeddedMessage(msg, playerName, activity, time);
+        Embed embed = discord.createEmbeddedMessage(msg, playerName, activity, time);
         Webhook webhookData = new Webhook();
         webhookData.setEmbeds(new Embed[]{embed});
         return webhookData;

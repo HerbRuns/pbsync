@@ -36,14 +36,20 @@ public class PersonalBestSync
     @Inject
     private PBSyncConfig config;
 
+    private Discord discord;
+    private ApiHandler apiHandler;
+
     private boolean isSyncing = false;
     private Map<String, String> activityTimes = new HashMap<>();
     private BossNames bossNames;
 
-    public void setUp()
+    public void setUp(Discord discord, ApiHandler apiHandler)
     {
-        bossNames = new BossNames();
-        activityTimes.clear();
+        this.discord = discord;
+        this.apiHandler = apiHandler;
+
+        this.bossNames = new BossNames();
+        this.activityTimes.clear();
     }
 
     public void cleanUp()
@@ -97,7 +103,7 @@ public class PersonalBestSync
                 List<String> webhookUrls = new ArrayList<>();
                 webhookUrls.add(config.pbSyncWebhookUrl());
 
-                ApiHandler.Instance().sendWebhookData(webhookUrls, personalBestSyncMessage(player, activityTimes))
+                apiHandler.sendWebhookData(webhookUrls, personalBestSyncMessage(player, activityTimes))
                     .exceptionally(ex -> {
                         log.error("Failed to send webhook data", ex);
                         return null;
@@ -122,7 +128,7 @@ public class PersonalBestSync
 
     private Webhook personalBestSyncMessage(String playerName, Map<String, String> activityTimes)
     {
-        String msg = Discord.createJsonBlobMessage(playerName, activityTimes);
+        String msg = discord.createJsonBlobMessage(playerName, activityTimes);
         Webhook webhookData = new Webhook();
         webhookData.setContent(msg);
         return webhookData;

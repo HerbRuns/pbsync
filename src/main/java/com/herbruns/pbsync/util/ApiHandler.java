@@ -14,22 +14,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ApiHandler
 {
-    private static ApiHandler instance; // Singleton instance
-
-    @Inject
     private OkHttpClient httpClient;
-
-    private ApiHandler(OkHttpClient httpClient)
-    {
-        this.httpClient = httpClient;
-    }
-
-    public static synchronized ApiHandler Instance() {
-        if (instance == null) {
-            instance = new ApiHandler(new OkHttpClient());
-        }
-        return instance;
-    }
+    public ApiHandler(OkHttpClient httpClient) { this.httpClient = httpClient; }
 
     public CompletableFuture<Void> sendWebhookData(List<String> webhookUrls, Webhook webhookData)
     {

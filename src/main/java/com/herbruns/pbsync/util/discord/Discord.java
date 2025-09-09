@@ -9,7 +9,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public class Discord {
-    public static Embed createEmbeddedMessage(String msg, String playerName, String activityName, String time) {
+    private Gson gson;
+
+    public Discord(Gson gson) { this.gson = gson;}
+
+    public Embed createEmbeddedMessage(String msg, String playerName, String activityName, String time) {
         Author author = new Author();
         author.setName("New Personal Best!");
 
@@ -36,8 +40,8 @@ public class Discord {
         return embed;
     }
 
-    public static String createJsonBlobMessage(String playerName, Map<String, String> activityTimes) {
-        Gson gson = new Gson();
+    public String createJsonBlobMessage(String playerName, Map<String, String> activityTimes) {
+        Gson newGson = gson.newBuilder().create();
 
         JsonObject root = new JsonObject();
         root.addProperty("player", playerName);
@@ -51,6 +55,6 @@ public class Discord {
         root.add("activities", activities);
 
         // Serialize to JSON string
-        return gson.toJson(root);
+        return newGson.toJson(root);
     }
 }

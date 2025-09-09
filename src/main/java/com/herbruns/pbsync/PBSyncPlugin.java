@@ -1,5 +1,6 @@
 package com.herbruns.pbsync;
 
+import com.google.gson.Gson;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import javax.inject.Inject;
@@ -7,14 +8,15 @@ import javax.inject.Inject;
 import com.herbruns.pbsync.features.PersonalBestInChat;
 import com.herbruns.pbsync.features.PersonalBestSync;
 import com.herbruns.pbsync.util.ApiHandler;
+import com.herbruns.pbsync.util.discord.Discord;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
-import net.runelite.api.Client;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import okhttp3.OkHttpClient;
 
 import java.util.concurrent.ExecutionException;
 
@@ -29,23 +31,33 @@ public class PBSyncPlugin extends Plugin
 	@Inject
 	private PBSyncConfig config;
 
+    @Inject
+    private OkHttpClient httpClient;
+    @Inject
+    private Gson gson;
+
     private ApiHandler apihandler;
+    private Discord discord;
     private PersonalBestInChat personalBestInChat;
     private PersonalBestSync personalBestSync;
 
 	@Override
 	protected void startUp() throws Exception
     {
+        apihandler = new ApiHandler(httpClient);
+        discord = new Discord(gson);
+
         if (personalBestSync == null)
         {
             personalBestSync = injector.getInstance(PersonalBestSync.class);
         }
-        personalBestSync.setUp();
+        personalBestSync.setUp(discord, apihandler);
 
         if (personalBestInChat == null)
         {
             personalBestInChat = injector.getInstance(PersonalBestInChat.class);
         }
+        personalBestInChat.setUp(discord, apihandler);
 	}
 
 	@Override
