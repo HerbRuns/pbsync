@@ -15,12 +15,17 @@ import java.util.stream.Collectors;
 public class ApiHandler
 {
     private OkHttpClient httpClient;
-    public ApiHandler(OkHttpClient httpClient) { this.httpClient = httpClient; }
+    private Gson gson;
+    public ApiHandler(OkHttpClient httpClient, Gson gson)
+    {
+        this.httpClient = httpClient;
+        this.gson = gson;
+    }
 
     public CompletableFuture<Void> sendWebhookData(List<String> webhookUrls, Webhook webhookData)
     {
-        Gson gson = new Gson();
-        String jsonStr = gson.toJson(webhookData);
+        Gson newGson = gson.newBuilder().create();
+        String jsonStr = newGson.toJson(webhookData);
 
         List<CompletableFuture<Void>> sends = webhookUrls.stream()
                 .map(url ->

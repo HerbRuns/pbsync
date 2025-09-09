@@ -44,7 +44,7 @@ public class PBSyncPlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
     {
-        apihandler = new ApiHandler(httpClient);
+        apihandler = new ApiHandler(httpClient, gson);
         discord = new Discord(gson);
 
         if (personalBestSync == null)
